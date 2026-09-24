@@ -5,23 +5,36 @@ import java.io.InputStreamReader;
 
 public class EscanerRed {
 
-    public Equipo escanear(String ip, int espera, int reintentos) {
+	// Realiza el ping y obtiene los datos del equipo
+    public Equipo escanear(
+        String ip,
+        int espera,
+        int reintentos
+    ) {
 
         try {
 
-            long inicio = System.currentTimeMillis();
+            long inicio =
+                System.currentTimeMillis();
 
             boolean activo = false;
 
             for (int i = 0; i <= reintentos; i++) {
 
-                Process proceso = Runtime.getRuntime().exec(
-                    "ping -n 1 -w " + espera + " " + ip
-                );
+                Process proceso =
+                    Runtime.getRuntime().exec(
+                        "ping -n 1 -w " +
+                        espera +
+                        " " +
+                        ip
+                    );
 
-                BufferedReader lector = new BufferedReader(
-                    new InputStreamReader(proceso.getInputStream())
-                );
+                BufferedReader lector =
+                    new BufferedReader(
+                        new InputStreamReader(
+                            proceso.getInputStream()
+                        )
+                    );
 
                 String linea;
 
@@ -39,9 +52,11 @@ public class EscanerRed {
                 }
             }
 
-            long tiempo = System.currentTimeMillis() - inicio;
+            long tiempo =
+                System.currentTimeMillis() - inicio;
 
-            String nombre = obtenerNombre(ip);
+            String nombre =
+                obtenerNombre(ip);
 
             return new Equipo(
                 ip,
@@ -61,33 +76,44 @@ public class EscanerRed {
         }
     }
 
-
+    // Busca el nombre del equipo utilizando nslookup
     private String obtenerNombre(String ip) {
 
         try {
 
-            Process proceso = Runtime.getRuntime().exec(
-                "nslookup " + ip
-            );
+            Process proceso =
+                Runtime.getRuntime().exec(
+                    "nslookup " + ip
+                );
 
-            BufferedReader lector = new BufferedReader(
-                new InputStreamReader(proceso.getInputStream())
-            );
+            BufferedReader lector =
+                new BufferedReader(
+                    new InputStreamReader(
+                        proceso.getInputStream()
+                    )
+                );
 
             String linea;
 
             while ((linea = lector.readLine()) != null) {
 
                 if (linea.startsWith("Name:")) {
-                    return linea.substring(5).trim();
+
+                    return linea
+                        .substring(5)
+                        .trim();
                 }
 
                 if (linea.startsWith("Nombre:")) {
-                    return linea.substring(7).trim();
+
+                    return linea
+                        .substring(7)
+                        .trim();
                 }
             }
 
         } catch (Exception e) {
+
             // No se pudo obtener el nombre
         }
 
